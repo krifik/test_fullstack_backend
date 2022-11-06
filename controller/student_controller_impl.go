@@ -106,7 +106,7 @@ func (controller *StudentControllerImpl) Store(ctx *fiber.Ctx) error {
 	exception.PanicIfNeeded(err)
 	t := time.Now().Unix()
 	randFilename := strconv.Itoa(int(t)) + file.Filename
-	request.AvatarUrl = os.Getenv("BASE_URL") + "/public/storage/" + randFilename
+	request.AvatarUrl = os.Getenv("BASE_URL") + "public/storage/" + randFilename
 	responses := controller.StudentService.Store(request)
 	ctx.SaveFile(file, "app/storage/"+randFilename)
 	return ctx.Status(200).JSON(model.WebResponse{
@@ -165,7 +165,7 @@ func (controller *StudentControllerImpl) Update(ctx *fiber.Ctx) error {
 	} else {
 		t := time.Now().Unix()
 		randFilename := strconv.Itoa(int(t)) + file.Filename
-		request.AvatarUrl = os.Getenv("BASE_URL") + "/public/storage/" + randFilename
+		request.AvatarUrl = os.Getenv("BASE_URL") + "public/storage/" + randFilename
 		controller.StudentService.Update(id, request)
 		err = os.Remove("app/storage/" + file.Filename)
 		ctx.SaveFile(file, "app/storage/"+randFilename)
