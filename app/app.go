@@ -19,6 +19,9 @@ func InitializedApp() *fiber.App {
 	configuration := config.NewConfiguration()
 	database := config.NewPostgresDatabase(configuration)
 	userController := module.NewUserModule(database)
+	// run migration and seeder automatically
+	config.NewRunMigration(database)
+	config.NewRunSeed(database)
 	studentController := module.NewStudentModule(database)
 	// Setup Fiber
 	// app := fiber.New(config.NewFiberConfig())
