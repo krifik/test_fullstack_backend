@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"os"
 
 	"github.com/krifik/test_fullstack_backend/app"
 	_ "github.com/krifik/test_fullstack_backend/docs"
@@ -20,6 +21,16 @@ import (
 // @in header
 // @name Authorization
 // @BasePath /api
+func getPort() string {
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = ":3000"
+	} else {
+		port = ":" + port
+	}
+
+	return port
+}
 func main() {
 	flag.Parse()
 	if arg := flag.Arg(0); arg != "" {
@@ -28,6 +39,6 @@ func main() {
 	}
 	app := app.InitializedApp()
 	// Start App
-	err := app.Listen(":3000")
+	err := app.Listen(getPort())
 	exception.PanicIfNeeded(err)
 }
