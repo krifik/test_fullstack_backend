@@ -1,6 +1,6 @@
 # Backend build with golang
 
-URL Demo : https://worktest-fullstack.netlify.app/student
+URL Demo : https://worktest-fullstack.netlify.app
 ## Installation
 
 clone this repository
