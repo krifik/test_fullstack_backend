@@ -23,6 +23,15 @@ rename .env.example to .env and edit up to you
 edit what you want
 make sure every variables env in accordance to your system  
 
+run migration
+```
+go run main.go db:migrate
+```
+run seeder
+```
+go run main.go db:seeder
+```
+
 exec in root dir and run
 ```
 go run main.go
