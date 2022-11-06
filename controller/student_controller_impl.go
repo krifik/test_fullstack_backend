@@ -169,8 +169,8 @@ func (controller *StudentControllerImpl) Update(ctx *fiber.Ctx) error {
 		t := time.Now().Unix()
 		randFilename := strconv.Itoa(int(t)) + file.Filename
 		request.AvatarUrl = os.Getenv("BASE_URL") + "public/storage/" + randFilename
-		controller.StudentService.Update(id, request)
-		url := strings.Split(file.Filename, os.Getenv("BASE_URL"))
+		student := controller.StudentService.Find(id)
+		url := strings.Split(student.AvatarUrl, os.Getenv("BASE_URL"))
 		sanitazeStr := strings.Split(url[1], "public")
 		os.Remove("app/" + sanitazeStr[1])
 		ctx.SaveFile(file, "app/storage/"+randFilename)
