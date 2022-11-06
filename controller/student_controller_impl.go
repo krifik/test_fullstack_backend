@@ -3,6 +3,7 @@ package controller
 import (
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -131,9 +132,11 @@ func (controller *StudentControllerImpl) Store(ctx *fiber.Ctx) error {
 func (controller *StudentControllerImpl) Delete(ctx *fiber.Ctx) error {
 	id, err := ctx.ParamsInt("id")
 	exception.PanicIfNeeded(err)
-	controller.StudentService.Delete(id)
 	student := controller.StudentService.Find(id)
-	os.Remove(student.AvatarUrl)
+	url := strings.Split(student.AvatarUrl, os.Getenv("BASE_URL"))
+	sanitazeStr := strings.Split(url[1], "public")
+	os.Remove("app/" + sanitazeStr[1])
+	controller.StudentService.Delete(id)
 	return ctx.Status(200).JSON(fiber.Map{
 		"code":    200,
 		"message": "Successfully delete student",
@@ -167,8 +170,11 @@ func (controller *StudentControllerImpl) Update(ctx *fiber.Ctx) error {
 		randFilename := strconv.Itoa(int(t)) + file.Filename
 		request.AvatarUrl = os.Getenv("BASE_URL") + "public/storage/" + randFilename
 		controller.StudentService.Update(id, request)
-		err = os.Remove("app/storage/" + file.Filename)
+		url := strings.Split(file.Filename, os.Getenv("BASE_URL"))
+		sanitazeStr := strings.Split(url[1], "public")
+		os.Remove("app/" + sanitazeStr[1])
 		ctx.SaveFile(file, "app/storage/"+randFilename)
+		controller.StudentService.Update(id, request)
 	}
 	return ctx.Status(200).JSON(fiber.Map{
 		"code":    200,
